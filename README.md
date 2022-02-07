@@ -7,6 +7,15 @@
     Author: Andrés Quan-Littow
     ID: 17652
     email: qua17652@uvg.edu.gt
-    Status: FINISHED; NOT TURNT IN
+    Status: FINISHED; TURNT IN
 
-## How to Run
+## Cómo Correr
+
+Dado que esté la terminal en el _root_ del proyecto, se puede hacer lo siguiente:
+
+    cd Ejercicio_<NUMERO>
+    sh ./script.sh
+
+Esto tendrá un output :)
+
+Si se quieren cambiar los parámetros, solo se necesitan cambiar los comandos dentro del sh!
