@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "consolecontroller.h": "c",
+        "errorhandling.h": "c",
+        "main.h": "c",
+        "stdio.h": "c",
+        "iterator": "c",
+        "random": "c"
+    }
+}
