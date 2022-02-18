@@ -3,6 +3,5 @@
 typedef struct Result
 {
     char *message;
-    int result;
 } Result;
 #endif
