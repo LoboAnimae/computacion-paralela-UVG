@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     n = strtoll(argv[2], NULL, 10);
 
     double first_time = omp_get_wtime();
-#pragma omp parallel for num_threads(thread_count) \
+#pragma omp parallel for num_threads(thread_count) schedule(static)\
     reduction(+                                    \
               : sum) private(k)
     for (k = 0; k < n; k++)
