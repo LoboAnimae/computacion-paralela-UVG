@@ -6,6 +6,9 @@
         "stdio.h": "c",
         "iterator": "c",
         "random": "c",
-        "screen.h": "c"
+        "screen.h": "c",
+        "bar.h": "c",
+        "__locale": "c",
+        "cmath": "c"
     }
 }
