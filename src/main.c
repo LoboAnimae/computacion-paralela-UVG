@@ -13,11 +13,13 @@ int main(int argc, char *argv[])
     Screen *menu = create_screen();
     Screen *names = create_screen();
     ScreenComponent *titleComponent = create_screen_component();
+    ScreenComponent *fileComponent = create_screen_component();
     ScreenComponent *bodyComponent = create_screen_component();
     ScreenComponent *namesComponent = create_screen_component();
     ScreenComponent *footerComponent = create_screen_component();
 
     add_component(menu, titleComponent);
+    add_component(menu, fileComponent);
     add_component(menu, bodyComponent);
     add_component(menu, footerComponent);
 
