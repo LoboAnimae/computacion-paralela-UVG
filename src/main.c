@@ -79,3 +79,39 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+/**
+ * Calculates the temperatures of a metal bar
+ * **/
+long double * calculate_temperatures(long double err, long int n, long double t_0, long double t_left, long double t_right double l, double c) {
+    int remaining_iterations = 10000000000;
+    long double current_error;                       // Check to see if we stop the loop
+    long double new_temperature;                     // New calculated temperature
+    long double temperatures[n];                     // All temperatures
+    temperatures[0] = t_left;
+    temperatures[1] = t_0;
+    temperatures[2] = t_0;
+    temperatures[n-1] = t_right;
+
+    while (current_error > err || remaining_iterations == 0) {
+        for (int j = 1; j < n; j++) {
+            // Computes the new temperature, adds it to the error calculation, and updates temperature list
+            new_temperature = obtain_temperature(temperatures[j], c, (0.1 * pow(delta_x, 2)) / c, l / n, temperatures[j-1], temperatures[j+1]);
+            current_error += fabsl(temperatures[j] - new_temperature);
+            temperatures[j] = new_temperature;
+        }
+        current_error /= n;
+        remaining_iterations--;
+    }
+    return temperatures;
+}
+
+
+
+/**
+ * Gets the next temperature
+ * **/
+long double obtain_temperature(long double t_j, double c, double delta_t, double delta_x, long double t_adjacent_1, long double t_adjacent_2) {
+    // Returns the new temperature
+    return t_j + ((c * delta_t) / (pow(delta_x, 2))) * (t_adjacent_1 - 2 * t_j + t_adjacent_2);
+}
