@@ -1,1 +1,0 @@
-Descarge el programa **piSeriesNaive.c**, compílelo y ejecútelo. Relice al menos 5 mediciones del valor con threads >= 2 y n >= 1000 (registre todos los números resultates). Describa lo que sucede con el resultado respecto al valor preciso de PI (3.14159265358979323846)
