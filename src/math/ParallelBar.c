@@ -7,8 +7,8 @@
 
 /**
  * Discussed options for parallelization:
- * Producer + consumer
- * Tasks
+ * Producer + consumer (we use two consumers and avoid frontier value exchange)
+ * Tasks (as in pseudocode)
  * Sections
  * **/
 
