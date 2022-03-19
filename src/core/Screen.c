@@ -1,6 +1,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "core/Screen.h"
+#include "core/DataStructures.h"
+#include "core/Colors.h"
+
+const char *saved_colors[] = {
+    "\033[0;30m",
+    "\033[0;31m",
+    "\033[0;32m",
+    "\033[0;33m",
+    "\033[0;34m",
+    "\033[0;35m",
+    "\033[0;36m",
+    "\033[0;37m"};
+int print_component_line(char *content, ProjectColors color)
+{
+    int color_print = printf("%s", saved_colors[color]);
+    int content_print = printf("%s", content);
+    int reset_print = printf("%s", saved_colors[WHITE]);
+    return color_print && content_print && reset_print;
+    // return 1;
+}
 
 /**
  * @brief Refreshes the screen with a set of controllers, printed one after another.
@@ -15,17 +35,19 @@ int refresh(Screen *screen, Result *result)
     {
         return -1;
     }
-
     // For each component
     for (int i = 0; i < screen->size; i++)
     {
         ScreenComponent *first_component = screen->components[i];
         Line *current_line = first_component->lines[0];
+        printf("Hello World!\n");
+        int option;
+        scanf("%d", &option);
         // Print every line and
         while (current_line != NULL)
         {
             // Unless it fails,
-            if (printf("%s", current_line->content) == -1)
+            if (print_component_line(current_line->content, current_line->color) == 0)
             {
                 if (result != NULL)
                     result->message = "Printf returned an error";
@@ -53,6 +75,25 @@ int add_component(Screen *target, ScreenComponent *component)
     component->id = newPosition;
     target->components[newPosition] = component;
     return newPosition;
+}
+
+int string_compare(char *firstString, char *secondString)
+{
+    int lengthOne = sizeof(firstString) / sizeof(char);
+    int lengthTwo = sizeof(secondString) / sizeof(char);
+    if (lengthOne != lengthTwo)
+    {
+        return -1;
+    }
+
+    for (int i = 0; i < lengthOne; i++)
+    {
+        if (firstString[i] != secondString[i])
+        {
+            return -1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -105,7 +146,7 @@ int remove_component(Screen *target, int id, Result *result)
  * @param line The line to add
  * @return int -1 if failure. The line id if success
  */
-int add_line(ScreenComponent *target, char *line)
+int add_line(ScreenComponent *target, char *line, ProjectColors color)
 {
     target->size++;
     target->lines = (Line **)realloc(target->lines, sizeof(Line *) * target->size);
@@ -115,6 +156,14 @@ int add_line(ScreenComponent *target, char *line)
     newLine->length = sizeof(line) / sizeof(char);
     newLine->id = newPosition;
     newLine->next = NULL;
+    if (color != -1)
+    {
+        newLine->color = color;
+    }
+    else
+    {
+        newLine->color = WHITE;
+    }
     target->lines[newPosition] = newLine;
     // Point the previous line to the new line
     if (newPosition > 0)
@@ -196,7 +245,7 @@ int remove_line(ScreenComponent *target, int id, Result *result)
     return 0;
 }
 
-int update_line(ScreenComponent *target, int id, char *line, Result *result)
+int update_line(ScreenComponent *target, int id, char *line, ProjectColors new_color, Result *result)
 {
     // Check if the id is valid
     if (target->size <= id)
@@ -213,6 +262,7 @@ int update_line(ScreenComponent *target, int id, char *line, Result *result)
     }
     // Update the content of the line
     Line *toBeUpdated = target->lines[id];
+    toBeUpdated->color = new_color;
     toBeUpdated->content = line;
     toBeUpdated->length = sizeof(line) / sizeof(char);
     return toBeUpdated->id;
@@ -244,18 +294,23 @@ int clear_screen(Result *controller)
 
 Screen *create_screen()
 {
+    // Before allocating, find out if the screen exists
     Screen *screen = (Screen *)malloc(sizeof(Screen));
     screen->size = 0;
     screen->components = NULL;
     return screen;
 }
 
-ScreenComponent *create_screen_component()
+ScreenComponent *create_screen_component(Screen *parent)
 {
     ScreenComponent *component = (ScreenComponent *)malloc(sizeof(ScreenComponent));
     component->id = 0;
     component->size = 0;
     component->lines = NULL;
+    if (parent != NULL)
+    {
+        add_component(parent, component);
+    }
     return component;
 }
 

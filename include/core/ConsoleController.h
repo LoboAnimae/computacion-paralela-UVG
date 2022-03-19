@@ -1,8 +1,7 @@
 #ifndef CONSOLE_CONTROLLER_H
 #define CONSOLE_CONTROLLER_H
 #include <stdio.h>
-#include <core/ErrorHandling.h>
-#include <core/Screen.h>
+#include "core/Screen.h"
 // typedef struct Line
 // {
 //     char *content;

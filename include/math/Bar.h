@@ -27,6 +27,8 @@ typedef struct Params
     long int n;
     double c;
     double l;
+    int thread_count;
+    long long iterations;
 } Params;
 
 /**
@@ -48,5 +50,6 @@ long double *caulculate_temperatures(Sequence *seq, Params *param, Deltas *delta
  * @return long double
  */
 long double obtain_temperature(Times *time, Deltas *delta, Params *param);
+#define DEFAULT_REMAINING_ITERATIONS 10000000000
 
 #endif
