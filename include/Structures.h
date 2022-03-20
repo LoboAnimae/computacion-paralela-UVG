@@ -1,29 +1,28 @@
 #ifndef STRUCTURES_PROJ_H
 #define STRUCTURES_PROJ_H
 
-template <class T>
 class Matrix
 {
 public:
     Matrix(int, int);
     ~Matrix();
-    T *data;
+    double *data;
     int rows;
     int cols;
-    T get(int, int);
-    T set(int, int, T);
+    double get(int, int);
+    void set(int, int, double);
 };
 
-template <class T>
 class Locality
 {
+public:
     Locality(int, int, int);
     ~Locality();
     Locality();
-    T data[3];
-    T previous();
-    T current();
-    T next();
-    void push(T);
+    double data[3];
+    double previous();
+    double current();
+    double next();
+    void push(double);
 };
 #endif

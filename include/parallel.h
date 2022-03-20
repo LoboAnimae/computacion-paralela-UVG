@@ -3,7 +3,6 @@
 
 #include "Structures.h"
 
-template <class T>
 class ParallelBar
 {
 public:
@@ -11,13 +10,13 @@ public:
     long long iteration;
     double left, right, constant;
     int space, time;
-    Matrix<T> solution_matrix;
+    Matrix *solution_matrix;
     ~ParallelBar();
     long long next();
     long long previous();
     int thread_count;
-    T calculate_next(Locality<T> *);
-    T get_time_init(int, T, T, int);
+    double calculate_next(Locality *);
+    double get_time_init(int, double, double, int);
     void run();
     bool stop();
 };

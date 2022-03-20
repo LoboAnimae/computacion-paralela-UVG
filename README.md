@@ -1,8 +1,8 @@
 # Resultados
 
-|   N   | Longitud |  C  | Temperatura | T-Izquierda | T-Derecha | Error |
-| :---: | :------: | :-: | :---------: | :---------: | :-------: | :---: |
-| 10000 |    50    |  5  |     50      |      1      |    100    |  0.1  |
+|   N   | Longitud |  C  | Temperatura | double-Izquierda | double-Derecha | Error |
+| :---: | :------: | :-: | :---------: | :--------------: | :------------: | :---: |
+| 10000 |    50    |  5  |     50      |        1         |      100       |  0.1  |
 
 | Tiempos Secuenciales |
 | :------------------: |

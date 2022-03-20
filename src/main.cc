@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     cout << "The time taken to calculate the bar is: " << omp_get_wtime() - start_time << " seconds" << endl;
     double parallel_start_time = omp_get_wtime();
-    ParallelBar<double> *bar = new ParallelBar<double>((long long)0, t_left, t_right, (double)C, (int)n, (int)delta_t, 8);
+    ParallelBar *bar = new ParallelBar((long long)0, t_left, t_right, (double)C, (int)n, (int)delta_t, 8);
     bar->run();
     cout << "The time taken to calculate the bar in parallel is: " << omp_get_wtime() - parallel_start_time << " seconds" << endl;
     return 0;

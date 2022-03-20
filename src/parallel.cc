@@ -2,8 +2,7 @@
 #include "Structures.h"
 #include <omp.h>
 
-template <class T>
-ParallelBar<T>::ParallelBar(long long iteration, double left, double right, double constant, int space, int time, int threads)
+ParallelBar::ParallelBar(long long iteration, double left, double right, double constant, int space, int time, int threads)
 {
     this->iteration = iteration;
     this->left = left;
@@ -12,17 +11,15 @@ ParallelBar<T>::ParallelBar(long long iteration, double left, double right, doub
     this->space = space;
     this->time = time;
     this->thread_count = threads;
-    this->solution_matrix = Matrix<T>(space, time);
+    this->solution_matrix = new Matrix(space, time);
 }
 
-template <class T>
-T ParallelBar<T>::get_time_init(int iteration, T left, T right, int max)
+double ParallelBar::get_time_init(int iteration, double left, double right, int max)
 {
     return (left - right) / (iteration * max);
 }
 
-template <class T>
-void ParallelBar<T>::run()
+void ParallelBar::run()
 {
     // TODO: Implement this without heap?
 #pragma omp single nowait
@@ -33,7 +30,7 @@ void ParallelBar<T>::run()
             this->solution_matrix->set(0, this->iteration, this->left);
             this->solution_matrix->set(this->space - 1, this->iteration, this->right);
         }
-        Locality<T> *locality = new Locality<T>(
+        Locality *locality = new Locality(
             this->solution_matrix->get(0, this->iteration),
             this->solution_matrix->get(1, this->iteration),
             this->solution_matrix->get(2, this->iteration));
@@ -50,33 +47,29 @@ void ParallelBar<T>::run()
                 this->solution_matrix->set(i, this->next(), this->calculate_next(locality));
                 if (this->stop())
                 {
-                    this->iteration();
+                    this->run();
                 }
             }
         }
     }
 }
 
-template <class T>
-long long ParallelBar<T>::next()
+long long ParallelBar::next()
 {
     return ++this->iteration;
 }
 
-template <class T>
-long long ParallelBar<T>::previous()
+long long ParallelBar::previous()
 {
     return --this->iteration;
 }
 
-template <class T>
-T ParallelBar<T>::calculate_next(Locality<T> *locality)
+double ParallelBar::calculate_next(Locality *locality)
 {
     return locality->current() + (locality->previous() - 2 * (locality->current()) - locality->next()) * this->constant;
 }
 
-template <class T>
-bool ParallelBar<T>::stop()
+bool ParallelBar::stop()
 {
     return this->iteration < 1000000;
 }
