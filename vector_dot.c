@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <time.h>
 #define TOTAL 100000000
+#define MIN 0
+#define MAX 10
 void Read_n(int *n_p);
 void Allocate_vectors(double **x_pp, double **y_pp, double **z_pp, int n);
 void Read_vector(double a[], int n, char vec_name[]);
@@ -27,27 +29,32 @@ void fill(double *, int size);
 /*---------------------------------------------------------------------*/
 int main(void)
 {
-   struct timespec start, end;
-   int n = TOTAL;
-   double *x, *y, *z;
-   Allocate_vectors(&x, &y, &z, n);
-   srand(time(NULL));
-   fill(x, n);
-   fill(y, n);
-   clock_gettime(CLOCK_REALTIME, &start);
-   Vector_sum(x, y, z, n);
-   clock_gettime(CLOCK_REALTIME, &end);
+    struct timespec start, end;
+    int n = TOTAL;
+    double *x, *y, *z;
+    Allocate_vectors(&x, &y, &z, n);
+    srand(time(NULL));
+    fill(x, n);
+    fill(y, n);
+    clock_gettime(CLOCK_REALTIME, &start);
+    Vector_sum(x, y, z, n);
+    clock_gettime(CLOCK_REALTIME, &end);
 
-   Print_vector(x, n, "X");
-   Print_vector(y, n, "Y");
-   Print_vector(z, n, "The sum is");
-   printf("\nTotal time: %f seconds\n", (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1000000000.0);
+    Print_vector(x, n, "X");
+    Print_vector(y, n, "Y");
+    Print_vector(z, n, "Result");
+    double accumulator = 0;
+    for (int i = 0; i < n; i++)
+    {
+        accumulator += z[i];
+    }
+    printf("The dot product is: %f\n", accumulator);
+    printf("\nTotal time: %f seconds\n", (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1000000000.0);
+    free(x);
+    free(y);
+    free(z);
 
-   free(x);
-   free(y);
-   free(z);
-
-   return 0;
+    return 0;
 } /* main */
 
 /*---------------------------------------------------------------------
@@ -59,13 +66,13 @@ int main(void)
  */
 void Read_n(int *n_p /* out */)
 {
-   printf("What's the order of the vectors?\n");
-   scanf("%d", n_p);
-   if (*n_p <= 0)
-   {
-      fprintf(stderr, "Order should be positive\n");
-      exit(-1);
-   }
+    printf("What's the order of the vectors?\n");
+    scanf("%d", n_p);
+    if (*n_p <= 0)
+    {
+        fprintf(stderr, "Order should be positive\n");
+        exit(-1);
+    }
 } /* Read_n */
 
 /*---------------------------------------------------------------------
@@ -82,14 +89,14 @@ void Allocate_vectors(
     double **z_pp /* out */,
     int n /* in  */)
 {
-   *x_pp = malloc(n * sizeof(double));
-   *y_pp = malloc(n * sizeof(double));
-   *z_pp = malloc(n * sizeof(double));
-   if (*x_pp == NULL || *y_pp == NULL || *z_pp == NULL)
-   {
-      fprintf(stderr, "Can't allocate vectors\n");
-      exit(-1);
-   }
+    *x_pp = malloc(n * sizeof(double));
+    *y_pp = malloc(n * sizeof(double));
+    *z_pp = malloc(n * sizeof(double));
+    if (*x_pp == NULL || *y_pp == NULL || *z_pp == NULL)
+    {
+        fprintf(stderr, "Can't allocate vectors\n");
+        exit(-1);
+    }
 } /* Allocate_vectors */
 
 /*---------------------------------------------------------------------
@@ -104,10 +111,10 @@ void Read_vector(
     int n /* in  */,
     char vec_name[] /* in  */)
 {
-   int i;
-   printf("Enter the vector %s\n", vec_name);
-   for (i = 0; i < n; i++)
-      scanf("%lf", &a[i]);
+    int i;
+    printf("Enter the vector %s\n", vec_name);
+    for (i = 0; i < n; i++)
+        scanf("%lf", &a[i]);
 } /* Read_vector */
 
 /*---------------------------------------------------------------------
@@ -122,11 +129,11 @@ void Print_vector(
     int n /* in */,
     char title[] /* in */)
 {
-   int i;
-   printf("%s\n", title);
-   for (i = TOTAL - 10; i < n; i++)
-      printf("%f ", b[i]);
-   printf("\n");
+    int i;
+    printf("%s\n", title);
+    for (i = TOTAL - 10; i < n; i++)
+        printf("%f ", b[i]);
+    printf("\n");
 } /* Print_vector */
 
 /*---------------------------------------------------------------------
@@ -143,20 +150,20 @@ void Vector_sum(
     double z[] /* out */,
     int n /* in  */)
 {
-   int i;
+    int i;
 
-   for (i = 0; i < n; i++)
-      z[i] = x[i] + y[i];
+    for (i = 0; i < n; i++)
+        z[i] = x[i] * y[i];
 } /* Vector_sum */
 
 double get_random(int min, int max)
 {
-   return (rand() % (max - min + 1)) + min;
+    return (rand() % (max - min + 1)) + min;
 }
 
 void fill(double *vector, int size)
 {
-   int i;
-   for (i = 0; i < size; i++)
-      vector[i] = get_random(0, 1000);
+    int i;
+    for (i = 0; i < size; i++)
+        vector[i] = get_random(MIN, MAX);
 }
