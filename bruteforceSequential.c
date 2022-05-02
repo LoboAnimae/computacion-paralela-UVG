@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <unistd.h>
-#include <crypt.h>  // TODO: check if it works or find alternatives
+#include "cryptopp860/des.h"
 // https://www.example-code.com/c/crypt2_3des.asp
 
 void decrypt(long key, char *ciph, int len){
@@ -14,7 +14,9 @@ void decrypt(long key, char *ciph, int len){
     for(int i=0; i<8; ++i){
         key <<= 1;
         k += (key & (0xFE << i*8));
-    }
+
+	}
+
     des_setparity((char *)&k);  //el poder del casteo y &
     ecb_crypt((char *)&k, (char *) ciph, 16, DES_DECRYPT);
 }
